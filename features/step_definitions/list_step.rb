@@ -3,7 +3,7 @@ Given(/^the input "([^"]*)" "([^"]*)"$/) do |arg1, arg2|
 end
 
 When(/^the program is run$/) do
-  @output = `python list.py #{@input} #{@input2}`
+  @output = `/usr/bin/python list.py #{@input} #{@input2}`
   raise('Command Failed!') unless $?.success?
 end
 

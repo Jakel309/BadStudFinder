@@ -3,12 +3,15 @@ import re
 import csv
 
 if re.search('[a-zA-Z]',sys.argv[1]):
-	fullCourse=sys.argv[1].translate(None,'[]').split('.')
+	fullCourse=sys.argv[1].translate(None,'[],').split('.')
 	secNum=fullCourse[1]
 	course=re.match(r"([A-Z]+)([0-9]+)",fullCourse[0],re.I)
 	if course:
 		items=course.groups()
-	f=open(sys.argv[2].translate(None,'[]'),'rb')
+	try:
+		f=open(sys.argv[2].translate(None,'[]'),'rb')
+	except IndexError:
+		f=open("CS374_2016_registrations.csv",'rb')
 	try:
 		reader=csv.DictReader(f)
 		for row in reader:
@@ -17,8 +20,11 @@ if re.search('[a-zA-Z]',sys.argv[1]):
 	finally:
 		f.close()
 else:
-	crn=sys.argv[1]
-	f=open(sys.argv[2].translate(None,'[]'),'rb')
+	crn=sys.argv[1].translate(None,'[],')
+	try:
+		f=open(sys.argv[2].translate(None,'[]'),'rb')
+	except IndexError:
+		f=open("CS374_2016_registrations.csv",'rb')
 	try:
 		reader=csv.DictReader(f)
 		for row in reader:
