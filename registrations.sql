@@ -152,3 +152,45 @@ CREATE TABLE registrations (
 	CHECK (`Tuesday Ind1` IN (0, 1)), 
 	CHECK (`International Ind` IN (0, 1))
 );
+
+load data local infile 'filepath'
+into table db.registrations
+fields terminated by ',' enclosed by '"'
+lines terminated by '\n';
+
+create table student(
+	`Banner ID` VARCHAR(9) NOT NULL, 
+	`First Name` VARCHAR(4) NOT NULL, 
+	`Last Name` VARCHAR(4) NOT NULL,
+	primary key(`Banner ID`)
+);
+
+create table section(
+	`CRN` INTEGER NOT NULL,
+	`Subject Code` VARCHAR(4) NOT NULL,
+	`Course Number` INTEGER NOT NULL,
+	`Section Number` VARCHAR(2) NOT NULL,
+	`Semester` VARCHAR(16),
+	`Year` INTEGER,
+	primary key (`CRN`)
+);
+
+create table enrollment(
+	`Banner ID` VARCHAR(9) NOT NULL,
+	`CRN` INTEGER NOT NULL,
+	primary key (`Banner ID`,`CRN`)
+);
+
+insert into student (`Banner ID`,`First Name`,`Last Name`)
+select distinct `Banner ID`,`First Name`,`Last Name` from registrations;
+
+insert into section (`CRN`,`Subject Code`,`Course Number`,`Section Number`)
+select distinct `CRN`,`Subject Code`,`Course Number`,`Section Number` from registrations;
+
+insert into enrollment (`Banner ID`,`CRN`)
+select distinct `Banner ID`,`CRN` from registrations;
+
+select st.`Banner ID`, st.`Last Name`, st.`First Name`, se.`Subject Code`, se.`Course Number`, se.`Section Number`
+from student as st, section as se, enrollment as en
+where st.`Banner ID` = en.`Banner ID` and en.`CRN` = se.`CRN`
+and se.`Subject Code` = 'CS' and se.`Course Number` = 374;
