@@ -17,7 +17,7 @@ if re.search('[a-zA-Z]', sys.argv[1]):
 	cursor.execute(''.join(["select `CRN` from ",
 		"section where `Subject Code` = '", items[0], 
 		"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
-		secNum, "';"])
+		secNum, "';"]))
 	crn = cursor.fetchone()[0];
 else:
 	crn = sys.argv[1].translate(None,'[],')
