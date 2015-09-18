@@ -32,7 +32,7 @@ if re.search('[a-zA-Z]',sys.argv[1]):
 else:
 	crn=sys.argv[1].translate(None,'[],')
 	query = ''.join(["select `First Name`, `Last Name` from registrations where",
-		"CRN = '", crn, ";"])
+		"CRN = '", crn, "';"])
 	# try:
 		# f=open(sys.argv[2].translate(None,'[]'),'rb')
 	# except IndexError:
