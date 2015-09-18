@@ -7,7 +7,7 @@ db = mysql.connector.connect(user='root', password='password',
 	host='127.0.0.1', database='db')
 cursor = db.cursor()
 
-query
+query = ""
 
 if re.search('[a-zA-Z]',sys.argv[1]):
 	fullCourse=sys.argv[1].translate(None,'[],').split('.')
