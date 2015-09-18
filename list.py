@@ -22,7 +22,7 @@ if re.search('[a-zA-Z]', sys.argv[1]):
 else:
 	crn = sys.argv[1].translate(None,'[],')
 
-cursor.execute(''.join(["select s.`First Name`, s.`Last Name`, s.`BannerID` from",
+cursor.execute(''.join(["select s.`First Name`, s.`Last Name`, s.`Banner ID` from",
 	" enrollment e inner join student s on e.`Banner Id` = s.`Banner ID` where ",
 	"CRN = '", str(crn), "';"]))
 
