@@ -15,9 +15,9 @@ if re.search('[a-zA-Z]',sys.argv[1]):
 	course=re.match(r"([A-Z]+)([0-9]+)",fullCourse[0],re.I)
 	if course:
 		items=course.groups()
-	query = "select `First Name`, `Last Name` from registrations where" +
-		"`Subject Code` = '" + items[0] + "' and `Course Number` = " + items[1] +
-		" and `Section Number` like '%" + secNum + "%';"
+	query = ''.join("select `First Name`, `Last Name` from registrations where",
+		"`Subject Code` = '", items[0], "' and `Course Number` = ", items[1],
+		" and `Section Number` like '%", secNum, "%';")
 	# try:
 		# f=open(sys.argv[2].translate(None,'[]'),'rb')
 	# except IndexError:
@@ -31,8 +31,8 @@ if re.search('[a-zA-Z]',sys.argv[1]):
 		# f.close()
 else:
 	crn=sys.argv[1].translate(None,'[],')
-	query = "select `First Name`, `Last Name` from registrations where" +
-		"CRN = '" + crn + ";"
+	query = ''.join("select `First Name`, `Last Name` from registrations where",
+		"CRN = '", crn, ";")
 	# try:
 		# f=open(sys.argv[2].translate(None,'[]'),'rb')
 	# except IndexError:
