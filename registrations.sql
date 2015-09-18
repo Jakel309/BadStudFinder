@@ -153,7 +153,7 @@ CREATE TABLE registrations (
 	CHECK (`International Ind` IN (0, 1))
 );
 
-load data local infile 'filepath'
+load data local infile 'CS374_2016_registrations.csv'
 into table db.registrations
 fields terminated by ',' enclosed by '"'
 lines terminated by '\n';
