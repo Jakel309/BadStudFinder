@@ -160,8 +160,8 @@ lines terminated by '\n';
 
 create table student(
 	`Banner ID` VARCHAR(9) NOT NULL, 
-	`First Name` VARCHAR(4) NOT NULL, 
-	`Last Name` VARCHAR(4) NOT NULL,
+	`First Name` VARCHAR(32) NOT NULL, 
+	`Last Name` VARCHAR(32) NOT NULL,
 	primary key(`Banner ID`)
 );
 
@@ -169,7 +169,7 @@ create table section(
 	`CRN` INTEGER NOT NULL,
 	`Subject Code` VARCHAR(4) NOT NULL,
 	`Course Number` INTEGER NOT NULL,
-	`Section Number` VARCHAR(2) NOT NULL,
+	`Section Number` VARCHAR(4) NOT NULL,
 	`Semester` VARCHAR(16),
 	`Year` INTEGER,
 	primary key (`CRN`)
