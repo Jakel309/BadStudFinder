@@ -24,7 +24,7 @@ else:
 
 cursor.execute(''.join(["select s.`First Name`, s.`Last Name`, s.`BannerID` from",
 	" enrollment e inner join student s on e.`Banner Id` = s.`Banner ID` where ",
-	"CRN = '", crn, "';"]))
+	"CRN = '", str(crn), "';"]))
 
 for (fname, lname, banner) in cursor:
 	print fname + ' ' + lname + ', ' + banner
