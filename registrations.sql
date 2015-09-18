@@ -157,6 +157,7 @@ load data local infile 'CS374_2016_registrations.csv'
 into table db.registrations
 fields terminated by ',' enclosed by '"'
 lines terminated by '\n';
+delete from registrations where crn = 0;
 
 create table student(
 	`Banner ID` VARCHAR(9) NOT NULL, 
