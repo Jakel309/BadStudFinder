@@ -42,7 +42,7 @@ CREATE TABLE registrations (
 	`Subject Code` VARCHAR(4) NOT NULL, 
 	`Subject Desc` VARCHAR(14) NOT NULL, 
 	`Course Number` INTEGER NOT NULL, 
-	`Section Number` VARCHAR(2) NOT NULL, 
+	`Section Number` VARCHAR(4) NOT NULL, 
 	`Course Title` VARCHAR(21) NOT NULL, 
 	`Course Level Code` VARCHAR(2) NOT NULL, 
 	`Course Campus Code` TIME NOT NULL, 
