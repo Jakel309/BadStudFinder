@@ -5,9 +5,9 @@ db = mysql.connector.connect(user='root', password='password',
 	host='127.0.0.1', database='db')
 cursor = db.cursor()
 
-cursor.execute("update enrollment set Semester = 3, Year = 2015")
+cursor.execute("update enrollment set Semester = 3, Year = 2015;")
 
-cursor.execute("select `Banner ID` from student")
+cursor.execute("select `Banner ID` from student;")
 
 grades = ['A', 'B', 'C', 'D', 'F', 'W']
 
