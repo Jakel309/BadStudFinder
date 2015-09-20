@@ -26,3 +26,4 @@ for (banner) in banners:
 		cursor.execute(''.join(["insert into enrollment values(", banner[0], ",",
 			str(course), ",", str(sem), ",", str(year), ",'", str(grade), "') ON DUPLICATE KEY UPDATE CRN = CRN;"]))
 
+db.commit()
