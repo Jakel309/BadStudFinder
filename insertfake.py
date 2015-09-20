@@ -23,6 +23,6 @@ for (banner) in banners:
 		year = random.randint(2010, 2015)
 		if (year == 2015 and sem == 3):
 			sem = 2
-		cursor.execute(''.join(["insert into enrollment values(", banner, ",",
+		cursor.execute(''.join(["insert into enrollment values(", banner[0], ",",
 			str(course), ",", str(sem), ",", str(year), ",'", str(grade), "');"]))
 
