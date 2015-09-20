@@ -24,5 +24,5 @@ for (banner) in banners:
 		if (year == 2015 and sem == 3):
 			sem = 2
 		cursor.execute(''.join(["insert into enrollment values(", banner[0], ",",
-			str(course), ",", str(sem), ",", str(year), ",'", str(grade), "') ON DUPLICATE KEY UPDATE;"]))
+			str(course), ",", str(sem), ",", str(year), ",'", str(grade), "') ON DUPLICATE KEY UPDATE CRN = CRN;"]))
 
