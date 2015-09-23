@@ -1,9 +1,9 @@
-Given(/^the input "([^"]*)" "([^"]*)"$/) do |arg1, arg2|
-  @input=arg1,@input2=arg2
+Given(/^the input "([^"]*)"$/) do |arg1|
+  @input=arg1
 end
 
 When(/^the program is run$/) do
-  @output = `/usr/bin/python list.py #{@input} #{@input2}`
+  @output = `/usr/bin/python list.py #{@input}`
   raise('Command Failed!') unless $?.success?
 end
 
