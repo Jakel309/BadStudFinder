@@ -183,7 +183,7 @@ create table section(
 create table enrollment(
 	`Banner ID` VARCHAR(9) NOT NULL,
 	`CRN` INTEGER NOT NULL,
-	`Term Code` INTEGER,
+	`Term Code` INTEGER NOT NULL,
 	`Grade` CHAR,
 	primary key (`Banner ID`,`CRN`,`Term Code`)
 );
