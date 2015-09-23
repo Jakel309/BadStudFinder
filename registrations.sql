@@ -183,16 +183,16 @@ create table section(
 create table enrollment(
 	`Banner ID` VARCHAR(9) NOT NULL,
 	`CRN` INTEGER NOT NULL,
-	`Semester` INTEGER,
-	`Year` INTEGER,
+	`Term Code` INTEGER NOT NULL,
 	`Grade` CHAR,
-	primary key (`Banner ID`,`CRN`,`Semester`,`Year`)
+	primary key (`Banner ID`,`CRN`,`Term Code`)
 );
 
 create table course_prereq(
 	`CRN` INTEGER NOT NULL,
-	`Requirement` VARCHAR(8),
-	`Requirement Type` ENUM('course','GPA','hours'),
+	`Requirement` VARCHAR(8) NOT NULL,
+	`Required Grade` CHAR,
+	`Requirement Type` ENUM('course','GPA','hours') NOT NULL,
 	primary key (`CRN`, `Requirement`, `Requirement Type`)
 );
 
@@ -206,8 +206,8 @@ select distinct `Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attemp
 insert into section (`CRN`,`Subject Code`,`Course Number`,`Section Number`)
 select distinct `CRN`,`Subject Code`,`Course Number`,`Section Number` from registrations;
 
-insert into enrollment (`Banner ID`,`CRN`)
-select distinct `Banner ID`,`CRN` from registrations;
+insert into enrollment (`Banner ID`,`CRN`, `Term Code`)
+select distinct `Banner ID`,`CRN`, `Term Code` from registrations;
 
 select st.`Banner ID`, st.`Last Name`, st.`First Name`, se.`Subject Code`, se.`Course Number`, se.`Section Number`
 from student as st, section as se, enrollment as en

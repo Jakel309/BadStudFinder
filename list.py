@@ -1,6 +1,9 @@
 import sys
 import re
 import mysql.connector
+import string
+
+#data entered in this order "'Course' 'Comma deliminated requirements'"
 
 db = mysql.connector.connect(user='root', password='password',
 	host='127.0.0.1', database='db')
@@ -22,11 +25,20 @@ if re.search('[a-zA-Z]', sys.argv[1]):
 else:
 	crn = sys.argv[1].translate(None,'[],')
 
-cursor.execute(''.join(["select s.`First Name`, s.`Last Name`, s.`Banner ID` from",
-	" enrollment e inner join student s on e.`Banner Id` = s.`Banner ID` where ",
-	"CRN = '", str(crn), "';"]))
+requirements=''
+try:
+	requirements=sys.argv[2].translate(None,'[]')
 
-for (fname, lname, banner) in cursor:
-	print fname + ' ' + lname + ', ' + banner
+	if list(requirements)[0]==',':
+		requirements=requirements.replace(',','',1)
+
+	reqList=requirements.split(',')
+except:
+	cursor.execute(''.join(["select s.`First Name`, s.`Last Name`, s.`Banner ID` from",
+		" enrollment e inner join student s on e.`Banner Id` = s.`Banner ID` where ",
+		"CRN = '", str(crn), "'order by `Last Name`;"]))
+
+	for (fname, lname, banner) in cursor:
+		print fname + ' ' + lname + ', ' + banner
 
 db.close();
