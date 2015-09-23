@@ -191,8 +191,9 @@ create table enrollment(
 
 create table course_prereq(
 	`CRN` INTEGER NOT NULL,
-	`Requirement` VARCHAR(8),
-	`Requirement Type` ENUM('course','GPA','hours'),
+	`Requirement` VARCHAR(8) NOT NULL,
+	`Required Grade` CHAR,
+	`Requirement Type` ENUM('course','GPA','hours') NOT NULL,
 	primary key (`CRN`, `Requirement`, `Requirement Type`)
 );
 
