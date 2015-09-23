@@ -189,6 +189,14 @@ create table enrollment(
 	primary key (`Banner ID`,`CRN`,`Semester`,`Year`)
 );
 
+create table course_prereq(
+	`CRN` INTEGER NOT NULL,
+	`Requirement` VARCHAR(8) NOT NULL,
+	`Required Grade` CHAR,
+	`Requirement Type` ENUM('course','GPA','hours') NOT NULL,
+	primary key (`CRN`, `Requirement`, `Requirement Type`)
+);
+
 insert into student (`Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
 	`Ovrall Cumm GPA Hours Earned`,`Ovrall Cumm GPA Hrs`,`Ovrall Cumm GPA Quality Points`, 
 	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed`)
