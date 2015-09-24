@@ -17,13 +17,15 @@ def is_ascii(s):
         return False
 
 crn = ""
-
+cursor.execute(''.join(["select max(`Term Code`) from enrollment"]))
+termCode=cursor.fetchone()[0]
 f=open('prereqs.txt','r')
 
 part=1
 
 course=''
 prereqs={}
+prereqsOld=[]
 classification=''
 crn = ""
 for line in f:
@@ -35,6 +37,7 @@ for line in f:
 			stuff=line.split(',')
 			for i in stuff:
 				stuff2=i.split(':')
+				prereqsOld.append(stuff2[0])
 				if re.search('[a-zA-Z]', stuff2[0]):
 					fullCourse = stuff2[0].translate(None, '[],').split('.')
 					secNum = fullCourse[1]
@@ -69,14 +72,30 @@ for line in f:
 			else:
 				crn = course.translate(None,'[],')
 
-			cursor.execute(''.join(["select s.`Banner ID` from ",
+			cursor.execute(''.join(["select s.`Banner ID`, s.`First Name`, s.`Last Name` from ",
 				"enrollment e inner join student s on e.`Banner Id` = s.`Banner ID` where ",
-				"CRN = '", str(crn), "' and e.`Term Code`= (select max(`Term Code`) from enrollment) order by `Last Name`;"]))
+				"CRN = '", str(crn), "' and e.`Term Code`='",str(termCode),"' order by `Last Name`;"]))
 
-			students=[]
+			students={}
 
-			for banner in cursor:
-				print banner[0]
-				students.append(banner[0])
+			for (banner, fName, lName) in cursor:
+				name=fName+' '+lName
+				students[name]=banner
+
+			for stud in students:
+				index=0
+				for prereq in prereqs:
+					cursor.execute(''.join(["select Grade from ",
+						"enrollment where `Banner ID`='",str(students[stud]),"' and ",
+						"CRN='",str(prereqs[prereq]),"' and `Term Code`=",
+						"(select max(`Term Code`) from enrollment where ",
+						"`Banner ID`='",str(students[stud]),"' and CRN='",str(prereq),"');"]))
+					try:
+						grade=cursor.fetchone()[0]
+						if grade<prereqs[prereq]:
+							print stud+" "+students[stud]+" recieved an "+grade+" in "+prereqsOld[index]+" expected "+prereqs[prereq]
+					except:
+						print stud+" "+students[stud]+" did not complete "+prereqsOld[index]
+				index=index+1
 
 db.close();
