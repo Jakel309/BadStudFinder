@@ -87,15 +87,17 @@ for line in f:
 				for prereq in prereqs:
 					cursor.execute(''.join(["select Grade from ",
 						"enrollment where `Banner ID`='",str(students[stud]),"' and ",
-						"CRN='",str(prereqs[prereq]),"' and `Term Code`=",
+						"CRN='",str(prereq),"' and `Term Code`=",
 						"(select max(`Term Code`) from enrollment where ",
 						"`Banner ID`='",str(students[stud]),"' and CRN='",str(prereq),"');"]))
 					try:
 						grade=cursor.fetchone()[0]
-						if grade<prereqs[prereq]:
-							print stud+" "+students[stud]+" recieved an "+grade+" in "+prereqsOld[index]+" expected "+prereqs[prereq]
+						if grade>prereqs[prereq]:
+							print stud+" "+students[stud]+" recieved a "+grade+" in "+prereqsOld[index]+" expected "+prereqs[prereq]
+							break
 					except:
 						print stud+" "+students[stud]+" did not complete "+prereqsOld[index]
-				index=index+1
+						break
+					index=index+1
 
 db.close();

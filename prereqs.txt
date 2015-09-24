@@ -1,4 +1,4 @@
 --This is a comment
 BIBL211.06
-PHYS101.02:C,GLST212.S1:B
+1283:C,1504:B
 Fr
