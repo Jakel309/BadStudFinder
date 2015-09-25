@@ -188,14 +188,6 @@ create table enrollment(
 	primary key (`Banner ID`,`CRN`,`Term Code`)
 );
 
-create table course_prereq(
-	`CRN` INTEGER NOT NULL,
-	`Requirement` VARCHAR(8) NOT NULL,
-	`Required Grade` CHAR,
-	`Requirement Type` ENUM('course','GPA','hours') NOT NULL,
-	primary key (`CRN`, `Requirement`, `Requirement Type`)
-);
-
 insert into student (`Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
 	`Ovrall Cumm GPA Hours Earned`,`Ovrall Cumm GPA Hrs`,`Ovrall Cumm GPA Quality Points`, 
 	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed`)
@@ -208,8 +200,3 @@ select distinct `CRN`,`Subject Code`,`Course Number`,`Section Number` from regis
 
 insert into enrollment (`Banner ID`,`CRN`, `Term Code`)
 select distinct `Banner ID`,`CRN`, `Term Code` from registrations;
-
-select st.`Banner ID`, st.`Last Name`, st.`First Name`, se.`Subject Code`, se.`Course Number`, se.`Section Number`
-from student as st, section as se, enrollment as en
-where st.`Banner ID` = en.`Banner ID` and en.`CRN` = se.`CRN`
-and se.`Subject Code` = 'CS' and se.`Course Number` = 374;
