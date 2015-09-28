@@ -21,7 +21,7 @@ create table section(
 	`Course Number` INTEGER NOT NULL,
 	`Section Number` VARCHAR(4) NOT NULL,
 	`Term Code` INTEGER NOT NULL,
-	primary key (`Subject Code`, `Course Number`, `Term Code`)
+	primary key (`CRN`, `Term Code`)
 );
 
 create table enrollment(
