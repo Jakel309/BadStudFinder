@@ -6,7 +6,7 @@ db = mysql.connector.connect(user='root', password='password',
 cursor = db.cursor()
 
 #create (replace) registration table
-cursor.execute("source home/ubuntu/badStudFinder/registrations.sql;")
+cursor.execute("source registrations.sql;")
 
 #get all csv files
 for path in glob("csvs/*.csv"):
