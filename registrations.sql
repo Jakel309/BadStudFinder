@@ -1,3 +1,4 @@
+drop table registrations;
 CREATE TABLE registrations (
 	`Pidm` INTEGER NOT NULL, 
 	`Term Code` INTEGER NOT NULL, 
@@ -152,51 +153,3 @@ CREATE TABLE registrations (
 	CHECK (`Tuesday Ind1` IN (0, 1)), 
 	CHECK (`International Ind` IN (0, 1))
 );
-
-load data local infile 'CS374_2016_registrations.csv'
-into table db.registrations
-fields terminated by ',' enclosed by '"'
-lines terminated by '\n';
-delete from registrations where crn = 0;
-
-create table student(
-	`Banner ID` VARCHAR(9) NOT NULL, 
-	`First Name` VARCHAR(32) NOT NULL, 
-	`Last Name` VARCHAR(32) NOT NULL,
-	`Ovrall Cumm GPA Hrs Attempted` INTEGER NOT NULL, 
-	`Ovrall Cumm GPA Hours Earned` INTEGER NOT NULL, 
-	`Ovrall Cumm GPA Hrs` INTEGER NOT NULL, 
-	`Ovrall Cumm GPA Quality Points` INTEGER NOT NULL, 
-	`Ovrall Cumm GPA` INTEGER NOT NULL, 
-	`Ovrall Cumm GPA Hrs Passed` INTEGER NOT NULL,
-	primary key(`Banner ID`)
-);
-
-create table section(
-	`CRN` INTEGER NOT NULL,
-	`Subject Code` VARCHAR(4) NOT NULL,
-	`Course Number` INTEGER NOT NULL,
-	`Section Number` VARCHAR(4) NOT NULL,
-	primary key (`CRN`)
-);
-
-create table enrollment(
-	`Banner ID` VARCHAR(9) NOT NULL,
-	`CRN` INTEGER NOT NULL,
-	`Term Code` INTEGER NOT NULL,
-	`Grade` CHAR,
-	primary key (`Banner ID`,`CRN`,`Term Code`)
-);
-
-insert into student (`Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
-	`Ovrall Cumm GPA Hours Earned`,`Ovrall Cumm GPA Hrs`,`Ovrall Cumm GPA Quality Points`, 
-	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed`)
-select distinct `Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
-	`Ovrall Cumm GPA Hours Earned`,`Ovrall Cumm GPA Hrs`,`Ovrall Cumm GPA Quality Points`, 
-	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed` from registrations;
-
-insert into section (`CRN`,`Subject Code`,`Course Number`,`Section Number`)
-select distinct `CRN`,`Subject Code`,`Course Number`,`Section Number` from registrations;
-
-insert into enrollment (`Banner ID`,`CRN`, `Term Code`)
-select distinct `Banner ID`,`CRN`, `Term Code` from registrations;
