@@ -22,3 +22,6 @@ cursor.execute("delete from registrations where crn = 0;")
 #dump into real tables, then it's ready to go
 for line in open("tables.sql").read().split(';\n'):
     cursor.execute(line)
+
+db.commit()
+
