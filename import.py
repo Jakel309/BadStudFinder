@@ -2,7 +2,7 @@ import mysql.connector
 import glob
 
 db = mysql.connector.connect(user='root', password='password',
-	host='127.0.0.1', database='db', allow_local_infile=True)
+	host='127.0.0.1', database='db', allow_local_infile=True, client_flags=[ClientFlag.LOCAL_FILES])
 cursor = db.cursor()
 
 #create (replace) registration table
