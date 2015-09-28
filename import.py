@@ -14,7 +14,7 @@ for path in glob("csvs/*.csv"):
 	cursor.execute("".join("load data local infile '", path , "' ",
 		"into table db.registrations ",
 		"fields terminated by ',' enclosed by '\"' ",
-		"lines terminated by '\n'; ")
+		"lines terminated by '\n'; "))
 #clean up empty rows
 cursor.execute("delete from registrations where crn = 0;")
 
