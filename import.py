@@ -1,16 +1,15 @@
 import mysql.connector
 import glob
-import os
 
 db = mysql.connector.connect(user='root', password='password',
 	host='127.0.0.1', database='db')
 cursor = db.cursor()
 
 #create (replace) registration table
-cursor.execute("source " + os.getcwd() + "/registrations.sql;")
+cursor.execute("source registrations.sql;")
 
 #get all csv files
-for path in glob(os.getcwd() + "/csvs/*.csv"):
+for path in glob("csvs/*.csv"):
 	#import each file
 	cursor.execute("".join("load data local infile '", path , "' ",
 		"into table db.registrations ",
