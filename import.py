@@ -2,11 +2,12 @@ import mysql.connector
 import glob
 
 db = mysql.connector.connect(user='root', password='password',
-	host='127.0.0.1', database='db', allow_local_infile=True, client_flags=[ClientFlag.LOCAL_FILES])
+	host='127.0.0.1', database='db', allow_local_infile=True)
 cursor = db.cursor()
 
 #create (replace) registration table
-cursor.execute("source registrations.sql;")
+for line in open("registrations.sql").read().split(';\n'):
+    cursor.execute(line)
 
 #get all csv files
 for path in glob("csvs/*.csv"):
@@ -19,4 +20,5 @@ for path in glob("csvs/*.csv"):
 cursor.execute("delete from registrations where crn = 0;")
 
 #dump into real tables, then it's ready to go
-cursor.execute("source tables.sql")
+for line in open("tables.sql").read().split(';\n'):
+    cursor.execute(line)
