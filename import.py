@@ -1,5 +1,5 @@
 import mysql.connector
-import glob
+from glob import glob
 
 db = mysql.connector.connect(user='root', password='password',
 	host='127.0.0.1', database='db', allow_local_infile=True)
