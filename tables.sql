@@ -43,4 +43,4 @@ insert into section (`CRN`,`Subject Code`,`Course Number`,`Section Number`, `Ter
 select distinct `CRN`,`Subject Code`,`Course Number`,`Section Number`, `Term Code` from registrations;
 
 insert into enrollment (`Banner ID`,`CRN`, `Term Code`, `Grade`)
-select distinct `Banner ID`,`CRN`, `Term Code`, `Grade` from registrations;
+select distinct `Banner ID`,`CRN`, `Term Code`, `Grade Code` from registrations;
