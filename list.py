@@ -9,13 +9,6 @@ db = mysql.connector.connect(user='root', password='password',
 	host='127.0.0.1', database='db')
 cursor = db.cursor()
 
-def is_ascii(s):
-    try:
-        s.decode('ascii')
-        return True
-    except UnicodeDecodeError:
-        return False
-
 crn = ""
 cursor.execute(''.join(["select max(`Term Code`) from enrollment"]))
 termCode=cursor.fetchone()[0]
@@ -24,32 +17,42 @@ f=open('prereqs.txt','r')
 part=1
 
 course=''
-prereqs={}
-prereqsOld=[]
+prereqs=[]
 classification=''
-crn = ""
 for line in f:
 	if list(line)[0]+list(line)[1]!='--':
 		if part==1:
 			course=line.replace("\n","").replace("\r","")
+			course=re.match(r"([a-z]+)([0-9]+)", course, re.I)
+			if course:
+				course=course.groups()
+			if type(course[1]) is str:
+				course=(course[0],int(course[1]))
 			part=part+1
 		elif part==2:
 			stuff=line.split(',')
 			for i in stuff:
-				stuff2=i.split(':')
-				prereqsOld.append(stuff2[0])
-				if re.search('[a-zA-Z]', stuff2[0]):
-					fullCourse = stuff2[0].translate(None, '[],').split('.')
-					secNum = fullCourse[1]
-					stuff2[0] = re.match(r"([A-Z]+)([0-9]+)", fullCourse[0], re.I)
-					if stuff2[0]:
-						items = stuff2[0].groups()
-					cursor.execute(''.join(["select `CRN` from ",
-						"section where `Subject Code` = '", items[0], 
-						"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
-						secNum, "';"]))
-					stuff2[0] = cursor.fetchone()[0];
-				prereqs[stuff2[0]]=stuff2[1].replace("\n","").replace("\r","")
+				# stuff2=i.split(':')
+				# prereqsOld.append(stuff2[0])
+				# if re.search('[a-zA-Z]', stuff2[0]):
+				# 	# fullCourse = stuff2[0].translate(None, '[],').split('.')
+				# 	# secNum = fullCourse[1]
+				# 	# stuff2[0] = re.match(r"([A-Z]+)([0-9]+)", fullCourse[0], re.I)
+				# 	# if stuff2[0]:
+				# 	# 	items = stuff2[0].groups()
+				# 	subCode=stuff2[0]
+				# 	cursor.execute(''.join(["select `CRN` from ",
+				# 		"section where `Subject Code` = '", items[0], 
+				# 		"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
+				# 		secNum, "';"]))
+				# 	stuff2[0] = cursor.fetchone()[0];
+				# sub=re.match(r"([a-z]+)([0-9]+)", stuff[0], re.I)
+				# if sub:
+				# 	sub=sub.groups()
+				# if type(sub[1]) is str:
+				# 	sub=(sub[0],int(sub[1]))
+				#prereqs[sub]=stuff2[1].replace("\n","").replace("\r","")
+				prereqs.append(i.replace("\n","").replace("\r",""))
 			part=part+1
 		elif part==3:
 			classification=line.replace("\n","").replace("\r","")
@@ -58,23 +61,24 @@ for line in f:
 			print classification
 			part=1
 
-			if re.search('[a-zA-Z]', course):
-				fullCourse = course.translate(None, '[],').split('.')
-				secNum = fullCourse[1]
-				course = re.match(r"([A-Z]+)([0-9]+)", fullCourse[0], re.I)
-				if course:
-					items = course.groups()
-				cursor.execute(''.join(["select `CRN` from ",
-					"section where `Subject Code` = '", items[0], 
-					"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
-					secNum, "';"]))
-				crn = cursor.fetchone()[0];
-			else:
-				crn = course.translate(None,'[],')
+			# if re.search('[a-zA-Z]', course):
+			# 	fullCourse = course.translate(None, '[],').split('.')
+			# 	secNum = fullCourse[1]
+			# 	course = re.match(r"([A-Z]+)([0-9]+)", fullCourse[0], re.I)
+			# 	if course:
+			# 		items = course.groups()
+			# 	cursor.execute(''.join(["select `CRN` from ",
+			# 		"section where `Subject Code` = '", items[0], 
+			# 		"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
+			# 		secNum, "';"]))
+			# 	crn = cursor.fetchone()[0];
+			# else:
+			# 	crn = course.translate(None,'[],')
 
-			cursor.execute(''.join(["select s.`Banner ID`, s.`First Name`, s.`Last Name` from ",
-				"enrollment e inner join student s on e.`Banner Id` = s.`Banner ID` where ",
-				"CRN = '", str(crn), "' and e.`Term Code`='",str(termCode),"' order by `Last Name`;"]))
+			cursor.execute(''.join(["select st.`Banner ID`, st.`First Name`, st.`Last Name` from",
+				" section se inner join enrollment e on e.CRN = se.CRN inner join",
+				" student st on e.`Banner ID` = st.`Banner ID` where",
+				" se.`Subject Code`='",course[0],"' and se.`Course Number`=",str(course[1]),";"]))
 
 			students={}
 
@@ -84,20 +88,53 @@ for line in f:
 
 			for stud in students:
 				index=0
-				for prereq in prereqs:
-					cursor.execute(''.join(["select Grade from ",
-						"enrollment where `Banner ID`='",str(students[stud]),"' and ",
-						"CRN='",str(prereq),"' and `Term Code`=",
-						"(select max(`Term Code`) from enrollment where ",
-						"`Banner ID`='",str(students[stud]),"' and CRN='",str(prereq),"');"]))
-					try:
-						grade=cursor.fetchone()[0]
-						if grade>prereqs[prereq]:
-							print stud+" "+students[stud]+" recieved a "+grade+" in "+prereqsOld[index]+" expected "+prereqs[prereq]
-							break
-					except:
-						print stud+" "+students[stud]+" did not complete "+prereqsOld[index]
-						break
-					index=index+1
+				for i in prereqs:
+					orPrereqs=i.split('*')
+					notPassed=True
+					orFailPre=[]
+					for prereq in orPrereqs:
+						prereq=prereq.split(':')
+						sub=re.match(r"([a-z]+)([0-9]+)", prereq[0], re.I)
+						if sub:
+							sub=sub.groups()
+						if type(sub[1]) is str:
+							sub=(sub[0],int(sub[1]))
+						cursor.execute(''.join(["select e.Grade from ",
+							"section s inner join enrollment e on e.CRN=s.CRN where ",
+							"e.`Banner ID` = '",str(students[stud]),"' and s.`Subject Code` = '",sub[0],"' and s.`Course Number` = ",str(sub[1])," and e.`Term Code` = "
+							"(select max(e.`Term Code`) from section s inner join enrollment e on e.CRN = s.CRN ",
+							"where e.`Banner ID` = '",str(students[stud]),"' and s.`Subject Code` = '",sub[0],"' and s.`Course Number` = ",str(sub[1])," and e.`Term Code`<>",str(termCode),");"]))
+						try:
+							grade=cursor.fetchone()[0]
+							if grade>prereq[1]:
+								orFailPre.append(prereq)
+							else:
+								notPassed=False
+						except:
+							orFailPre.append(prereq)
+					if notPassed:
+						for prereq in orPrereqs:
+							prereq=prereq.split(':')
+							sub=re.match(r"([a-z]+)([0-9]+)", prereq[0], re.I)
+							if sub:
+								sub=sub.groups()
+							if type(sub[1]) is str:
+								sub=(sub[0],int(sub[1]))
+							cursor.execute(''.join(["select e.Grade from ",
+								"section s inner join enrollment e on e.CRN=s.CRN where ",
+								"e.`Banner ID` = '",str(students[stud]),"' and s.`Subject Code` = '",sub[0],"' and s.`Course Number` = ",str(sub[1])," and e.`Term Code` = "
+								"(select max(e.`Term Code`) from section s inner join enrollment e on e.CRN = s.CRN ",
+								"where e.`Banner ID` = '",str(students[stud]),"' and s.`Subject Code` = '",sub[0],"' and s.`Course Number` = ",str(sub[1])," and e.`Term Code`<>",str(termCode),");"]))
+							try:
+								grade=cursor.fetchone()[0]
+								if grade>prereq[1]:
+									print stud+" "+students[stud]+" recieved a "+grade+" in "+prereq[0]+" expected "+prereq[1]
+								else:
+									notPassed=False
+							except:
+								print stud+" "+students[stud]+" did not complete "+prereq[0]
+			course=''
+			prereqs=[]
+			classification=''
 
 db.close();
