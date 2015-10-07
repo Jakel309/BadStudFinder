@@ -35,9 +35,10 @@ create table enrollment(
 insert into student (`Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
 	`Ovrall Cumm GPA Hours Earned`,`Ovrall Cumm GPA Hrs`,`Ovrall Cumm GPA Quality Points`, 
 	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed`)
-select distinct `Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
+select `Banner ID`,`First Name`,`Last Name`,`Ovrall Cumm GPA Hrs Attempted`, 
 	`Ovrall Cumm GPA Hours Earned`,`Ovrall Cumm GPA Hrs`,`Ovrall Cumm GPA Quality Points`, 
-	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed` from (select * from registrations order by `Term Code` DESC) r;
+	`Ovrall Cumm GPA`,`Ovrall Cumm GPA Hrs Passed` from (select * from registrations order by `Term Code` DESC) r
+	group by `Banner ID`,`First Name`,`Last Name`;
 
 insert into section (`CRN`,`Subject Code`,`Course Number`,`Section Number`, `Term Code`)
 select distinct `CRN`,`Subject Code`,`Course Number`,`Section Number`, `Term Code` from registrations;
