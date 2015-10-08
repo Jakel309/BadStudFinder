@@ -90,16 +90,18 @@ for line in f:
 			# else:
 			# 	crn = course.translate(None,'[],')
 
-			cursor.execute(''.join(["select st.`Banner ID`, st.`First Name`, st.`Last Name` from",
+			cursor.execute(''.join(["select st.`Banner ID`, st.`First Name`, st.`Last Name`, se.`Section Number` from",
 				" section se inner join enrollment e on e.CRN = se.CRN inner join",
 				" student st on e.`Banner ID` = st.`Banner ID` where",
-				" se.`Subject Code`='",course[0],"' and se.`Course Number`=",str(course[1]),";"]))
+				" se.`Subject Code`='",course[0],"' and se.`Course Number`=",str(course[1])," and se.`Term Code`=",str(termCode)," order by se.`Section Number`;"]))
 
 			students={}
+			section={}
 
-			for (banner, fName, lName) in cursor:
+			for (banner, fName, lName, sNum) in cursor:
 				name=fName+' '+lName
 				students[name]=banner
+				section[name]=sNum
 
 			for stud in students:
 				index=0
@@ -143,11 +145,11 @@ for line in f:
 							try:
 								grade=cursor.fetchone()[0]
 								if grade>prereq[1]:
-									print stud+" "+students[stud]+" recieved a "+grade+" in "+prereq[0]+" expected "+prereq[1]
+									print stud+" "+students[stud]+" recieved a "+grade+" in "+prereq[0]+" expected "+prereq[1]+" for course: "+course[0]+str(course[1])+"."+section[stud]
 								else:
 									notPassed=False
 							except:
-								print stud+" "+students[stud]+" did not complete "+prereq[0]
+								print stud+" "+students[stud]+" did not complete "+prereq[0]+" for course: "+course[0]+str(course[1])+"."+section[stud]
 			course=''
 			prereqs=[]
 			classification=''
