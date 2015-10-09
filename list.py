@@ -52,7 +52,8 @@ for line in f:
 		elif part==3:
 			classification=line.replace("\n","").replace("\r","")
 			part=1
-
+			print "-----------------------------------------------------------------------------------------"
+			print "Course: "+course[0]+str(course[1])
 			cursor.execute(''.join(["select st.`Banner ID`, st.`First Name`, st.`Last Name`, se.`Section Number` from",
 				" section se inner join enrollment e on e.CRN = se.CRN inner join",
 				" student st on e.`Banner ID` = st.`Banner ID` where",
