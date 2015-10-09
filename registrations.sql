@@ -1,4 +1,4 @@
-drop table registrations;
+drop table if exists registrations;
 CREATE TABLE registrations (
 	`Pidm` INTEGER NOT NULL, 
 	`Term Code` INTEGER NOT NULL, 

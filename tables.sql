@@ -1,6 +1,6 @@
-drop table student;
-drop table section;
-drop table enrollment;
+drop table if exists student;
+drop table if exists section;
+drop table if exists enrollment;
 
 create table student(
 	`Banner ID` VARCHAR(9) NOT NULL, 
