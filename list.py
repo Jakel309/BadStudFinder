@@ -47,48 +47,11 @@ for line in f:
 		elif part==2:
 			stuff=line.split(',')
 			for i in stuff:
-				# stuff2=i.split(':')
-				# prereqsOld.append(stuff2[0])
-				# if re.search('[a-zA-Z]', stuff2[0]):
-				# 	# fullCourse = stuff2[0].translate(None, '[],').split('.')
-				# 	# secNum = fullCourse[1]
-				# 	# stuff2[0] = re.match(r"([A-Z]+)([0-9]+)", fullCourse[0], re.I)
-				# 	# if stuff2[0]:
-				# 	# 	items = stuff2[0].groups()
-				# 	subCode=stuff2[0]
-				# 	cursor.execute(''.join(["select `CRN` from ",
-				# 		"section where `Subject Code` = '", items[0], 
-				# 		"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
-				# 		secNum, "';"]))
-				# 	stuff2[0] = cursor.fetchone()[0];
-				# sub=re.match(r"([a-z]+)([0-9]+)", stuff[0], re.I)
-				# if sub:
-				# 	sub=sub.groups()
-				# if type(sub[1]) is str:
-				# 	sub=(sub[0],int(sub[1]))
-				#prereqs[sub]=stuff2[1].replace("\n","").replace("\r","")
 				prereqs.append(i.replace("\n","").replace("\r",""))
 			part=part+1
 		elif part==3:
 			classification=line.replace("\n","").replace("\r","")
-			print course
-			print prereqs
-			print classification
 			part=1
-
-			# if re.search('[a-zA-Z]', course):
-			# 	fullCourse = course.translate(None, '[],').split('.')
-			# 	secNum = fullCourse[1]
-			# 	course = re.match(r"([A-Z]+)([0-9]+)", fullCourse[0], re.I)
-			# 	if course:
-			# 		items = course.groups()
-			# 	cursor.execute(''.join(["select `CRN` from ",
-			# 		"section where `Subject Code` = '", items[0], 
-			# 		"' and `Course Number` = ", items[1], " and `Section Number` like '%", 
-			# 		secNum, "';"]))
-			# 	crn = cursor.fetchone()[0];
-			# else:
-			# 	crn = course.translate(None,'[],')
 
 			cursor.execute(''.join(["select st.`Banner ID`, st.`First Name`, st.`Last Name`, se.`Section Number` from",
 				" section se inner join enrollment e on e.CRN = se.CRN inner join",
